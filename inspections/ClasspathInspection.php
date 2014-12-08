@@ -44,7 +44,7 @@ class ClasspathInspection implements Inspection{
 		$expectedSub = "src/" . str_replace("\\", "/", $mainClass) . ".php";
 		$mainClassFile = $this->dir . $expectedSub;
 		if(!is_file($mainClassFile)){
-			$result->info("Main class file expected at <code>$expectedSub</code> but it is not a file");
+			$result->error("Main class file expected at <code>$expectedSub</code> but it is not a file");
 			goto end;
 		}
 		$result->info("Main class file found at <code>$expectedSub</code>");

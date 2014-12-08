@@ -50,6 +50,7 @@ extract($result);
 if($error){
 	goto end;
 }
+usage_inc("unphar", $timestamp);
 echo <<<EOS
 <h1>Success</h1>
 <p>Phar has been successfully converted to zip.<br>

@@ -1,11 +1,14 @@
+<?php
+include "functions.php";
+?>
 <html><head>
 	<title>Phar creation result</title>
 </head><body><font face="Comic Sans MS">
 <?php
 
+use inspections\BadPracticeInspection;
 use inspections\ClasspathInspection;
 
-include "functions.php";
 if(!isset($_FILES["file"])){
 	http_response_code(400);
 	echo "Page must be accessed by POST with upload file entry 'file'";
@@ -40,7 +43,7 @@ if($file["error"] !== 0){
 	}
 	goto the_end;
 }
-$result = phar_buildFromZip($file["tmp_name"]);
+$result = phar_buildFromZip($file["tmp_name"], substr($file["name"], 0, -4));
 if($result["error"] !== MAKEPHAR_ERROR_NO){
 	echo "<h1>Failed to create phar</h1>";
 	echo "<p>Error: ";
@@ -92,12 +95,16 @@ echo "<ul>";
 /** @var inspections\Inspection[] $inspections */
 $inspections = [];
 $dir = $result["extractpath"];
-if(!isset($_POST["inspection_classpath"])){
-	echo "<li>Warning: inspection_classpath POST field not found!</li>";
-	$_POST["inspection_classpath"] = "off";
+foreach(["inspection_classpath", "inspection_bad_practice"] as $field){
+	if(!isset($_POST[$field])){
+		$_POST[$field] = "off";
+	}
 }
 if($_POST["inspection_classpath"] === "on"){
 	$inspections[] = new ClasspathInspection($dir);
+}
+if($_POST["inspection_bad_practice"] === "on"){
+	$inspections[] = new BadPracticeInspection($dir);
 }
 
 foreach($inspections as $inspection){
@@ -107,6 +114,11 @@ foreach($inspections as $inspection){
 
 echo "</ul>";
 echo "<p>End of inspections</p>";
+?>
+<p>You are also recommended to submit the phar file to <a href="http://www.pocketmine.net/pluginReview.php"
+		target="_blank">the official PocketMine plugin review tool</a> to check your bad practices and
+	the permissions that your plugin uses.</p>
+<?php
 the_end:
 ?>
 </font></body></html>

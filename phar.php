@@ -19,7 +19,8 @@
 				?>
 			</p>
 			<p>Carry out the following inspections too: <br>
-			<input type="checkbox" name="inspection_classpath"> Check classpath
+			<input type="checkbox" name="inspection_classpath"> Check classpath<br>
+			<input type="checkbox" name="inspection_bad_practice"> Scan for bad practice<br>
 			</p>
 			<p><input type="submit" value="create phar"></p>
 		</form>

@@ -1,9 +1,12 @@
 <?php
 
-const DATA_PATH = "C:\\Apache24\\htdocs\\data\\";
+define("htdocs", dirname(__FILE__) . "/", true);
+define("SERVER_PATH", dirname(htdocs) . "/", true);
+
+define("DATA_PATH", htdocs . "data/");
 @mkdir(DATA_PATH, 0777, true);
 @mkdir(DATA_PATH . "phars");
-const TMP_PATH = "C:\\Apache24\\tmp\\";
+define("TMP_PATH", SERVER_PATH . "tmp/");
 @mkdir(TMP_PATH, 0777, true);
 
 const MAKEPHAR_ERROR_NO = 0;
@@ -21,7 +24,7 @@ spl_autoload_register(function($class){
 	require_once dirname(__FILE__) . "\\" . $class . ".php";
 });
 
-const gc_last = "C:\\Apache24\\htdocs\\gc_last";
+define("gc_last", htdocs . "gc_last", true);
 if(is_file(gc_last)){
 	$last = (int) file_get_contents(gc_last);
 	$diff = time() - $last;
@@ -72,7 +75,7 @@ function deldir($dir){
 	rmdir($dir);
 }
 
-const PRIV_DATA = "C:\\Apache24\\privdata\\";
+define("PRIV_DATA", SERVER_PATH . "privdata\\");
 @mkdir(PRIV_DATA);
 
 function start_session($data = [], $timeout = 7200){
@@ -148,14 +151,14 @@ function utils_getURL($page, $timeout = 2){
 	return $ret;
 }
 
-function phar_buildFromZip($zipPath){
+function phar_buildFromZip($zipPath, $name = ""){
 	$zip = new ZipArchive;
 	$result = [
 		"phar" => null,
 		"pharpath" => "null.php",
 		"gzphar" => null,
 		"gzpharpath" => "null.php",
-		"extractpath" => "C:\\Apache24\\htdocs\\null.php",
+		"extractpath" => htdocs . "null.php",
 		"error" => MAKEPHAR_ERROR_NO,
 		"warnings" => [],
 		"notices" => [],
@@ -267,16 +270,16 @@ function phar_buildFromZip($zipPath){
 		}
 	}
 	$result["extractpath"] = $dir;
-	while(is_file($file = DATA_PATH . ($subpath = "phars/" . randomClass(16, "phar") . ".phar")));
+	while(is_file($file = DATA_PATH . ($subpath = "phars/" . randomClass(16, "phar_" . $name . "_") . ".phar")));
 	$result["phar"] = $phar = new Phar($file);
-	$result["pharpath"] = "data/$subpath";
+	$result["pharpath"] = "/data/$subpath";
 	$phar->setStub($_POST["stub"]);
 	$phar->setSignatureAlgorithm(Phar::SHA1);
 	$phar->startBuffering();
 	$phar->buildFromDirectory($dir);
 	/** @var Phar $other */
 	$result["gzphar"] = $other = $phar->compress(Phar::GZ);
-	$result["gzpharpath"] = $gzPath = substr(realpath($other->getPath()), strlen(realpath("C:\\Apache24\\htdocs\\")));
+	$result["gzpharpath"] = $gzPath = "/" . str_replace("\\", "/", substr(realpath($other->getPath()), strlen(realpath(htdocs)) + 1));
 	$phar->stopBuffering();
 	return $result;
 }
@@ -312,7 +315,7 @@ function unphar_toZip($tmpName, &$result){
 		}
 		$zip = new ZipArchive;
 		$dir = "data/phars/";
-		while(is_file($file = "C:\\Apache24\\htdocs\\" . ($rel = $dir . randomClass(16, "zip") . ".zip")));
+		while(is_file($file = htdocs . ($rel = $dir . randomClass(16, "zip") . ".zip")));
 		$result["zipPath"] = $file;
 		$result["zipRelativePath"] = $rel;
 		$err = $zip->open($file, ZipArchive::CREATE);
@@ -385,7 +388,7 @@ function usage_inc($key, &$timestamp){
 }
 
 function getTmpDir(){
-	$dir = "C:\\Apache24\\tmp\\";
+	$dir = TMP_PATH;
 	for($i = 0; file_exists($dir . $i); $i++);
 	$dir .= "$i\\";
 	mkdir($dir);
