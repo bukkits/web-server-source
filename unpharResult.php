@@ -1,9 +1,9 @@
-<html>
+<?php
+include "functions.php";
+?><html>
 <head><title>Phar extraction result</title></head>
 <body><font face="Comic Sans MS">
 <?php
-
-include "functions.php";
 if(!isset($_FILES["file"])){
 	http_response_code(400);
 	echo <<<EOD
@@ -41,7 +41,7 @@ if($file["error"] !== 0){
 	}
 	goto end;
 }
-unphar_toZip($file["tmp_name"], $result);
+unphar_toZip($file["tmp_name"], $result, substr($file["name"], 0, -5));
 /** @var string|null $tmpDir */
 /** @var string|null $zipPath */
 /** @var string|null $zipRelativePath */

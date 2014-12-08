@@ -1,3 +1,6 @@
+<?php
+include "../../functions.php";
+?>
 <html>
 <head>
 	<title>Plugin Builds</title>
@@ -12,7 +15,6 @@
 	Some repos may not have <code>master</code> as their default branch. Non-default branches will be in red, so only builds of the default branch will be available.
 </p>
 <?php
-include "../../functions.php";
 $projects = [];
 foreach(scandir(".") as $owner){
 	if(trim($owner, ".") !== "" and is_dir($owner)){

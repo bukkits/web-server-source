@@ -1,5 +1,11 @@
 <?php
 
+define("START_TIME", microtime(true));
+register_shutdown_function(function(){
+	$time = microtime(true) - START_TIME;
+	echo "<p>Page generated in $time second(s)</p>";
+});
+
 define("htdocs", dirname(__FILE__) . "/", true);
 define("SERVER_PATH", dirname(htdocs) . "/", true);
 
@@ -295,7 +301,7 @@ function phar_addDir(Phar $phar, $include, $realpath){
 	}
 }
 
-function unphar_toZip($tmpName, &$result){
+function unphar_toZip($tmpName, &$result, $name = ""){
 	$result = [
 		"tmpDir" => null,
 		"zipPath" => null,
@@ -315,7 +321,7 @@ function unphar_toZip($tmpName, &$result){
 		}
 		$zip = new ZipArchive;
 		$dir = "data/phars/";
-		while(is_file($file = htdocs . ($rel = $dir . randomClass(16, "zip") . ".zip")));
+		while(is_file($file = htdocs . ($rel = $dir . randomClass(16, "zip_" . $name . "_") . ".zip")));
 		$result["zipPath"] = $file;
 		$result["zipRelativePath"] = $rel;
 		$err = $zip->open($file, ZipArchive::CREATE);
