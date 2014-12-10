@@ -4,3 +4,6 @@ function scrollTo(project){
 	top = top.top;
 	$("html, body").animate({scrollTop: top}, 500);
 }
+function scrollToTop(){
+	$("html, body").animate({scrollTop: 0}, 500);
+}

@@ -8,7 +8,7 @@ include "../../functions.php";
 	<script src="js/indexScroll.js"></script>
 </head>
 <body bgcolor="#f0ffff"><font face="Comic Sans MS">
-<h1>Plugin Builds</h1>
+<h1><a name="pagetop">Plugin Builds</a></h1>
 <p>
 	<b>About branches/pull requests</b>: Plugins are developed at the <code>master</code> branch. If you see branches other than <code>master</code>, they usually contain code that is unstable but adds new features to the plugin. Once they are stable or finished, they will be merged into the <code>master</code> branch. Therefore, you are discouraged to use non-<code>master</code>-branch builds.<br>
 	Builds of pull requests are built from code modified by other people on GitHub (or from other branches). They may be dangerous. Look into that pull request's link for details. You are encouraged to use <a href="?branches=master"><code>master</code> branch builds only</a>.<br>
@@ -37,8 +37,11 @@ if(isset($_GET["branches"]) and $_GET["branches"] !== "*"){
 foreach($projects as $fullName){
 	$defaultBranch = json_decode(utils_getURL("https://api.github.com/repos/$fullName"), true)["default_branch"];
 	echo "<br><hr>";
+	echo "<div align='right'><a href='#pagetop' onclick='javascript:scrollToTop();'>
+			<font size='2'>Back to top</font></a></div>";
 	$id = "top-" . str_replace("/", "-", $fullName);
-	echo "<h2><a name='top-$fullName' id='$id' href='https://github.com/$fullName' target='_blank'>$fullName</a></h2>";
+	echo "<h2><a name='top-$fullName' id='$id' href='https://github.com/$fullName'
+			target='_blank'>$fullName</a></h2>";
 	echo "<p>Default branch: <code>$defaultBranch</code></p>";
 	echo "<table border='1' width='1000'>";
 	echo "<tr>";
@@ -90,7 +93,7 @@ foreach($projects as $fullName){
 		echo "<td align='center'><a href='$path'>Download $commit</a></td>";
 		echo "<td align='center'><a href='https://github.com/$fullName/tree/$commit' target='_blank'>$date</a></td>";
 		echo "<td align='center'><a href='$path.gz'>Download</a></td>";
-		echo "</tr>\n";
+		echo "</tr>";
 	}
 	echo "</table>";
 }
