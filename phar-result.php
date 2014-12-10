@@ -59,7 +59,7 @@ $gzPath = $result["gzpharpath"];
 echo <<<EOP
 <h1>Phar has been successfully created.</h1>
 <p><a href="$url">Download the phar here.</a></p>
-<p><a href="$gzPath">You can also download this GZIP-compressed archive.</a> It is smaller in size to download, but you have to extract it yourself.</p>
+<p><a href="$gzPath">You can also download this GZIP-compressed archive.</a> It is smaller in size to download, but you have to decompress it yourself.</p>
 <p>The download link is available for at least two hours.</p>
 EOP;
 $cnt = usage_inc("pharbuild", $time);
@@ -115,8 +115,8 @@ foreach($inspections as $inspection){
 echo "</ul>";
 echo "<p>End of inspections</p>";
 ?>
-<p>You are also recommended to submit the phar file to <a href="http://www.pocketmine.net/pluginReview.php"
-		target="_blank">the official PocketMine plugin review tool</a> to check your bad practices and
+<p>You are also recommended to check the phar file at <a href="http://www.pocketmine.net/pluginReview.php"
+		target="_blank">the official PocketMine plugin reviewing tool</a> to check your bad practices and
 	the permissions that your plugin uses.</p>
 <?php
 the_end:
