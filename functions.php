@@ -153,7 +153,10 @@ function utils_getURL($page, $timeout = 2){
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 	curl_setopt($ch, CURLOPT_USERAGENT, "Apache/2.4.10 (Win32) OpenSSL/1.0.1h PHP/5.6.3");
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json", "Authorization: Bearer " . GITHUB_OAUTH_TOKEN]);
+	$prefix = "https://api.github.com";
+	if(substr($prefix, 0, strlen($prefix)) === $prefix){
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json", "Authorization: Bearer " . GITHUB_OAUTH_TOKEN]);
+	}
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, (int) $timeout);
 	$ret = curl_exec($ch);
 	curl_close($ch);
