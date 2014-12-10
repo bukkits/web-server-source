@@ -5,3 +5,4 @@ data/builds/*/
 gc_last
 .idea
 private
+test.php
