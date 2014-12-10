@@ -28,7 +28,7 @@ foreach(scandir(".") as $owner){
 echo "<ul>";
 foreach($projects as $project){
 	$p = str_replace("/", "-", $project);
-	echo "<li><a href='javascript:scrollTo(\"$p\");'>$project</a></li>";
+	echo "<li><a href='#top-$project' onclick='javascript:scrollTo(\"$p\");'>$project</a></li>";
 }
 echo "</ul>";
 if(isset($_GET["branches"]) and $_GET["branches"] !== "*"){
