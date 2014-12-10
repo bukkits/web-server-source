@@ -24,7 +24,7 @@ class BadPracticeInspection implements Inspection{
 				$result->warning("<code>Server::getInstance()</code> scanned in file <code>" .
 					substr($file, strlen($this->dir)) . "</code><br>
 					<ul><li>The PHP extensions that PocketMine-MP uses have some issues with
-					static properties. You are recommended try to use other methods to get
+					static properties. You are recommended try using other methods to get
 					the <code>Server</code> instance.</li>
 					<li>" .
 					($isMain ?
