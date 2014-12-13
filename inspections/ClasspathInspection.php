@@ -64,7 +64,7 @@ class ClasspathInspection implements Inspection{
 			$subpath = str_replace("\\", "/", substr($file, strlen($src), -4));
 			$contents = file_get_contents($file);
 			$namespace = implode("\\", array_slice($explosion = explode("/", $subpath), 0, -1));
-			$namespaceEx = str_replace("\\", "\\\\", $namespacs);
+			$namespaceEx = str_replace("\\", "\\\\", $namespace);
 			if(preg_match_all("#namespace[\t \r\n]+" . $namespaceEx . "[\t \r\n]*[\\{\\;]#i", $contents) === 0){
 				$result->warning("Namespace declaration as <code>$namespace</code> for <code>src/$subpath.php</code> missing");
 			}
