@@ -65,11 +65,11 @@ class ClasspathInspection implements Inspection{
 			$contents = file_get_contents($file);
 			$namespace = implode("\\", array_slice($explosion = explode("/", $subpath), 0, -1));
 			if(preg_match_all("#namespace[\t \r\n]+$namespace[\t \r\n]*[\\{\\;]#i", $contents) === 0){
-				$result->warning("Namespace declaration as $namespace for src/$subpath.php missing");
+				$result->warning("Namespace declaration as <code>$namespace</code> for <code>src/$subpath.php</code> missing");
 			}
 			$class = $explosion[count($explosion) - 1];
 			if(preg_match_all("#(class|interface|trait)[\t \r\n]+$class#i", $contents) === 0){
-				$result->warning("Class/interface/trait declaration as $namespace\\$class missing at src/$subpath.php");
+				$result->warning("Class/interface/trait declaration as <code>$namespace\\$class</code> missing at <code>src/$subpath.php</code>");
 			}
 		}
 		end:
