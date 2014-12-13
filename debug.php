@@ -1,6 +1,6 @@
 <pre><?php
 
-$ip = _SERVER["REMOTE_ADDR"];
+$ip = $_SERVER["REMOTE_ADDR"];
 if($ip !== "::1" and substr($ip, 0, 10) !== "192.168.1."){
 	http_response_code(403);
 	echo "403 Forbidden\r\nfor IP $ip";
