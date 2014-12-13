@@ -12,18 +12,12 @@ class ClasspathInspection implements Inspection{
 	 */
 	public function run(){
 		$result = new InspectionResult("Classpath");
-		$pluginYml = fopen($this->dir . "plugin.yml", "rb");
-		while(!feof($pluginYml)){
-			$line = trim(fgets($pluginYml));
-			if(strpos($line, "main: ") === 0){
-				$mainClass = substr($line, 6);
-				break;
-			}
-		}
-		if(!isset($mainClass)){
+		$pluginYml = yaml_parse_file($this->dir . "plugin.yml");
+		if(!isset($pluginYml["main"])){
 			$result->error("Attribute <code>main</code> is missing in <code>plugin.yml</code>!");
 			goto end;
 		}
+		$mainClass = $pluginYml["main"];
 		$result->info("Main class scanned: $mainClass");
 		$tokenHead = true;
 		for($i = 0; $i < strlen($mainClass); $i++){
@@ -63,6 +57,20 @@ class ClasspathInspection implements Inspection{
 		}
 		if(!preg_match_all("#class $simpleName (implements ([A-Za-z0-9_]+, ?)?[A-Za-z0-9]+)?extends $superclass#i", $code)){
 			$result->error("Main class <code>$simpleName</code> is not declared as a subclass of pocketmine\\plugin\\PluginBase.");
+		}
+		$src = rtrim(realpath($this->dir . "src"), "/\\") . "/";
+		foreach(new \RegexIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($src)), '#.php$#i') as $file){
+			$file = realpath($file);
+			$subpath = str_replace("\\", "/", substr($file, strlen($src), -4));
+			$contents = file_get_contents($file);
+			$namespace = implode("\\", array_slice($explosion = explode("/", $subpath), 0, -1));
+			if(preg_match_all("#namespace[\t \r\n]+$namespace[\t \r\n]*[\\{\\;]#i", $contents) === 0){
+				$result->warning("Namespace declaration as $namespace for src/$subpath.php missing");
+			}
+			$class = $explosion[count($explosion) - 1];
+			if(preg_match_all("#(class|interface|trait)[\t \r\n]+$class#i", $contents) === 0){
+				$result->warning("Class/interface/trait declaration as $namespace\\$class missing at src/$subpath.php");
+			}
 		}
 		end:
 		return $result;
