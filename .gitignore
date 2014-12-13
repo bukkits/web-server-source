@@ -7,3 +7,6 @@ gc_last
 private
 test.php
 desktop.ini
+**_vti_**
+favicon.*
+!favicon.ico
