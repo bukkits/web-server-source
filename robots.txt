@@ -8,6 +8,7 @@ Disallow: /phar-result.php
 Disallow: /unpharResult.php
 Disallow: /empty.php
 Disallow: /functions.php
+Disallow: /desktop.ini
 
 User-agent: Mediapartners-Google
 Allow: /

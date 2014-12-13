@@ -33,7 +33,7 @@ class BadPracticeInspection implements Inspection{
 							"You can use <code>\$this->getOwner()->getServer()</code> to get
 							the <code>Server</code> instance instead.":
 							"You can pass <code>\$this->getServer()</code> from the plugin object to
-							your current class's constructor. $file &&& $mainFile")
+							your current class's constructor.")
 					)
 					. "</li></ul>");
 			}
