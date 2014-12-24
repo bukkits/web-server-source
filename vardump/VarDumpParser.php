@@ -25,9 +25,9 @@ class VarDumpParser{
 			case "int":
 				$result = new IntVariable($this);
 				break;
-//			case "float":
-//				$result = new FloatVariable($this);
-//				break;
+			case "float":
+				$result = new FloatVariable($this);
+				break;
 //			case "object":
 //				$result = new ObjectVariable($this);
 //				break;
@@ -60,5 +60,10 @@ class VarDumpParser{
 		$diff = strlen($remaining) - strlen($trimmed);
 		$this->skip($diff);
 		return $diff;
+	}
+	public function printRemaining(){
+		echo "<pre>";
+		echo htmlspecialchars(substr($this->dump, $this->pointer));
+		echo "</pre>";
 	}
 }

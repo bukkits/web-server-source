@@ -9,10 +9,10 @@ class ArrayVariable extends Variable{
 	public function __construct(VarDumpParser $parser){
 		$count = intval($parser->readUntil(")"));
 		$parser->readUntil("{");
+		$parser->skip(1);
 		$parser->ltrim();
-		$parser->readUntil("[");
 		for($i = 0; $i < $count; $i++){
-			$parser->skip(1);
+			$parser->skip(1); // [
 			$key = $parser->readUntil("]=>");
 			if(substr($key, 0, 1) === "\"" and substr($key, -1) === "\""){
 				$key = substr($key, 1, -1);
@@ -22,14 +22,17 @@ class ArrayVariable extends Variable{
 			$parser->ltrim();
 			$value = $parser->readVar();
 			$this->array[$key] = $value;
+			$parser->ltrim();
 		}
 		$parser->readUntil("}");
+		$parser->skip(1); // }
 		$parser->ltrim();
 	}
 	public function presentInHtml(){
 		echo Variable::TYPE_ARRAY;
 		echo "<ul>";
 		foreach($this->array as $key => $value){
+			$key = htmlspecialchars($key);
 			echo "<li>";
 			echo "<code>";
 			if($this->hasStringKey){

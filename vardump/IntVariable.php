@@ -7,6 +7,7 @@ class IntVariable extends Variable{
 	public function __construct(VarDumpParser $parser){
 		$this->int = intval($parser->readUntil(")"));
 		$parser->skip(1);
+		$parser->ltrim();
 	}
 	public function presentInHtml(){
 		echo Variable::TYPE_INT;
