@@ -48,18 +48,18 @@ else{
 function exec_gc(){
 	$exp = time() - 7200;
 	foreach(scandir(DATA_PATH . "phars/") as $file){
-		if(substr($file, -9) === "index.php"){
+		if(substr($file, -4) === ".php"){
 			continue;
 		}
 		$file = DATA_PATH . "phars/$file";
 		if(is_file($file)){
 			$time = filemtime($file);
 			if($time < $exp){
-				unlink($file);
+//				unlink($file);
 			}
 		}
 	}
-	deltmp();
+//	deltmp();
 	file_put_contents(gc_last, (string) time());
 }
 
