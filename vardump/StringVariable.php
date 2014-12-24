@@ -15,8 +15,8 @@ class StringVariable extends Variable{
 	public function presentInHtml(){
 		echo Variable::TYPE_STRING;
 		echo ":&nbsp;";
-		echo "<code><span style='background-color: #E0E0E0'>";
+		echo "<code>\"<span style='background-color: #E0E0E0'>";
 		echo htmlspecialchars($this->string);
-		echo "</span></code>";
+		echo "</span>\"</code>";
 	}
 }
