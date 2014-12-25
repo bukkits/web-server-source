@@ -4,13 +4,19 @@ namespace vardump;
 
 class ArrayVariable extends Variable{
 	/** @var Variable[] */
-	private $array = [];
-	private $hasStringKey = false;
+	protected $array = [];
+	protected $hasStringKey = false;
 	public function __construct(VarDumpParser $parser){
 		$count = intval($parser->readUntil(")"));
 		$parser->readUntil("{");
 		$parser->skip(1);
 		$parser->ltrim();
+		$this->readArray($count, $parser);
+		$parser->readUntil("}");
+		$parser->skip(1); // }
+		$parser->ltrim();
+	}
+	protected function readArray($count, VarDumpParser $parser){
 		for($i = 0; $i < $count; $i++){
 			$parser->skip(1); // [
 			$key = $parser->readUntil("]=>");
@@ -24,13 +30,14 @@ class ArrayVariable extends Variable{
 			$this->array[$key] = $value;
 			$parser->ltrim();
 		}
-		$parser->readUntil("}");
-		$parser->skip(1); // }
-		$parser->ltrim();
 	}
 	public function presentInHtml(){
 		echo Variable::TYPE_ARRAY;
 		echo "<ul>";
+		$this->presentArrayInHtml();
+		echo "</ul>";
+	}
+	protected function presentArrayInHtml(){
 		foreach($this->array as $key => $value){
 			$key = htmlspecialchars($key);
 			echo "<li>";
@@ -47,6 +54,5 @@ class ArrayVariable extends Variable{
 			$value->presentInHtml();
 			echo "</li>";
 		}
-		echo "</ul>";
 	}
 }

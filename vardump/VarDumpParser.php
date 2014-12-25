@@ -13,7 +13,11 @@ class VarDumpParser{
 	 * @throws \Exception
 	 */
 	public function readVar(){
-		$type = trim(trim($this->readUntil("(")), "&");
+		if(substr($this->dump, $this->pointer, 11) === "*RECURSION*"){
+			$this->read(11);
+			return new RecursionVariable($this);
+		}
+		$type = ltrim(trim($this->readUntil("(")), "&");
 		$this->skip(1);
 		switch($type){
 			case "string":
@@ -28,12 +32,14 @@ class VarDumpParser{
 			case "float":
 				$result = new FloatVariable($this);
 				break;
-//			case "object":
-//				$result = new ObjectVariable($this);
-//				break;
+			case "object":
+				$result = new ObjectVariable($this);
+				break;
 			case "array":
 				$result = new ArrayVariable($this);
 				break;
+			case "*RECURSION*":
+
 			default:
 				throw new \Exception("Unknown type '$type'");
 		}
