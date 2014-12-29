@@ -6,11 +6,16 @@ class ArrayVariable extends Variable{
 	/** @var Variable[] */
 	protected $array = [];
 	protected $hasStringKey = false;
+	protected $threeDots = false;
 	public function __construct(VarDumpParser $parser){
 		$count = intval($parser->readUntil(")"));
 		$parser->readUntil("{");
 		$parser->skip(1);
 		$parser->ltrim();
+		if($parser->peek(3) === "..."){
+			$this->threeDots = true;
+			return;
+		}
 		$this->readArray($count, $parser);
 		$parser->readUntil("}");
 		$parser->skip(1); // }
@@ -38,6 +43,9 @@ class ArrayVariable extends Variable{
 		echo "</ul>";
 	}
 	protected function presentArrayInHtml(){
+		if($this->threeDots){
+			echo "<li>...</li>";
+		}
 		foreach($this->array as $key => $value){
 			$key = htmlspecialchars($key);
 			echo "<li>";

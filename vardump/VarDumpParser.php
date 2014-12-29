@@ -72,4 +72,7 @@ class VarDumpParser{
 		echo htmlspecialchars(substr($this->dump, $this->pointer));
 		echo "</pre>";
 	}
+	public function peek($length){
+		return substr($this->dump, $this->pointer, $length);
+	}
 }

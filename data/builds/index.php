@@ -92,7 +92,12 @@ foreach($projects as $fullName){
 			echo $branch;
 		}
 		echo "</td>";
-		echo "<td align='center'><a href='$path'>Download $commit</a></td>";
+		echo "<td align='center'>";
+		echo "<a href='$path'>Download $commit</a>";
+		if(filesize($path) < 1024){
+			echo "<br><font color='#f04020'>Warning: this file seems to be too small. It might be a corrupted file!</font>";
+		}
+		echo "</td>";
 		echo "<td align='center'><a href='https://github.com/$fullName/tree/$commit' target='_blank'>$date</a></td>";
 		echo "<td align='center'><a href='$path.gz'>Download</a></td>";
 		echo "</tr>";
