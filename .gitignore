@@ -10,3 +10,5 @@ desktop.ini
 **_vti_**
 favicon.*
 !favicon.ico
+
+private/legionpe.php
