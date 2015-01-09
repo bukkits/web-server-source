@@ -230,9 +230,10 @@ function phar_buildFromZip($zipPath, $name = ""){
 		return $result;
 	}
 	if(!is_file($dir . "plugin.yml")){
-		$results["warnings"][] = "Cannot find plugin.yml in ZIP root!";
+		$result["warnings"][] = "Cannot find plugin.yml in ZIP root!";
+		$results = [];
 		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir)) as $file){
-			if(basename($file) === "plugin.yml"){
+			if(strtolower(basename($file)) === "plugin.yml"){
 				$real = realpath($file);
 				$include = str_replace("\\", "/", substr($real, strlen(realpath($dir))));
 				$slashCount = 0;

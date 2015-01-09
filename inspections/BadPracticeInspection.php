@@ -14,6 +14,10 @@ class BadPracticeInspection implements Inspection{
 		$result = new InspectionResult("Bad practice");
 		$pluginYml = file_get_contents($this->dir . "plugin.yml");
 		$manifest = yaml_parse($pluginYml);
+		if($manifest === false){
+			$result->error("Error parsing <code>plugin.yml</code>");
+			return $result;
+		}
 		$mainFile = realpath($this->dir . "src/" . str_replace("\\", "/", $manifest["main"]) . ".php");
 		/** @var \SplFileInfo $file */
 		foreach(new \RegexIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->dir)), "#\\.php\$#") as $file){

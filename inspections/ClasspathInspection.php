@@ -13,6 +13,10 @@ class ClasspathInspection implements Inspection{
 	public function run(){
 		$result = new InspectionResult("Classpath");
 		$pluginYml = yaml_parse_file($this->dir . "plugin.yml");
+		if($pluginYml === false){
+			$result->error("Error parsing <code>plugin.yml</code>");
+			return $result;
+		}
 		if(!isset($pluginYml["main"])){
 			$result->error("Attribute <code>main</code> is missing in <code>plugin.yml</code>!");
 			goto end;
