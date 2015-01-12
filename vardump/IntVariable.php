@@ -20,6 +20,26 @@ class IntVariable extends Variable{
 		echo "<li>Hexadecimal (base 16): <code>";
 		printf("%02X", $this->int);
 		echo "<sub>16</sub></code></li>";
+		$timezone = utils_getURL("http://ip-api.com/php/" . $_SERVER["REMOTE_ADDR"]);
+		if($timezone){
+			$data = unserialize($timezone);
+			if(!isset($data["timezone"])){
+				goto bad;
+			}
+			$tz = $data["timezone"];
+			$tzo = new \DateTimeZone($tz);
+		}
+		else{
+			bad:
+			$tz = "UTC";
+			$tzo = new \DateTimeZone("UTC");
+		}
+		echo "<li>As unix timestamp at $tz: <ul>";
+		$date = new \DateTime("now", $tzo);
+		$date->setTimestamp($this->int);
+		echo "<li>d-m-y: {$date->format("j-n-Y")}</li>";
+		echo "<li>Time: {$date->format("H:i:s")}</li>";
+		echo "</ul></li>";
 		echo "</ul>";
 	}
 }

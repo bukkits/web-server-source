@@ -8,7 +8,8 @@ use vardump\VarDumpParser;
 include "functions.php";
 
 if(!isset($_POST["dump"])){
-	echo "Missing post field 'dump'";
+	header("Location: varDump.php");
+	return;
 }
 
 $parser = new VarDumpParser($_POST["dump"]);

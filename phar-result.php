@@ -55,11 +55,9 @@ if($result["error"] !== MAKEPHAR_ERROR_NO){
 	goto the_end;
 }
 $url = $result["pharpath"];
-$gzPath = $result["gzpharpath"];
 echo <<<EOP
 <h1>Phar has been successfully created.</h1>
 <p><a href="$url">Download the phar here.</a></p>
-<p><a href="$gzPath">You can also download this GZIP-compressed archive.</a> It is smaller in size to download, but you have to decompress it yourself.</p>
 <p>The download link is available for at least two hours.</p>
 EOP;
 $cnt = usage_inc("pharbuild", $time);

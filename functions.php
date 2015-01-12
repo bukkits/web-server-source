@@ -2,8 +2,11 @@
 
 define("START_TIME", microtime(true));
 register_shutdown_function(function(){
+	if(defined("NO_PAGE_GEN_FOOTER") and constant("NO_PAGE_GEN_FOOTER")){
+		return;
+	}
 	$time = microtime(true) - START_TIME;
-	echo "<p>Page generated in $time second(s)</p>";
+	echo "<hr><p>Page generated in $time second(s)</p>";
 });
 
 define("htdocs", dirname(__FILE__) . "/", true);
@@ -168,8 +171,6 @@ function phar_buildFromZip($zipPath, $name = ""){
 	$result = [
 		"phar" => null,
 		"pharpath" => "null.php",
-		"gzphar" => null,
-		"gzpharpath" => "null.php",
 		"extractpath" => htdocs . "null.php",
 		"error" => MAKEPHAR_ERROR_NO,
 		"warnings" => [],
@@ -290,9 +291,7 @@ function phar_buildFromZip($zipPath, $name = ""){
 	$phar->setSignatureAlgorithm(Phar::SHA1);
 	$phar->startBuffering();
 	$phar->buildFromDirectory($dir);
-	/** @var Phar $other */
-	$result["gzphar"] = $other = $phar->compress(Phar::GZ);
-	$result["gzpharpath"] = $gzPath = "/" . str_replace("\\", "/", substr(realpath($other->getPath()), strlen(realpath(htdocs)) + 1));
+	$phar->compressFiles(Phar::GZ);
 	$phar->stopBuffering();
 	return $result;
 }
