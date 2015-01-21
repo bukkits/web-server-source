@@ -1,5 +1,6 @@
 <?php
 
+const STYLE_DATE = "j<\\s\\u\\p>S</\\s\\u\\p> F, Y \\a\\t H:i:s";
 define("START_TIME", microtime(true));
 register_shutdown_function(function(){
 	if(defined("NO_PAGE_GEN_FOOTER") and constant("NO_PAGE_GEN_FOOTER")){
@@ -405,4 +406,70 @@ function getTmpDir(){
 	$dir .= "$i\\";
 	mkdir($dir);
 	return $dir;
+}
+
+function getClientTimezone(){
+	if(!defined("CLIENT_TIMEZONE")){
+		$data = unserialize(utils_getURL("http://ip-api.com/php/" . $_SERVER["REMOTE_ADDR"], 5));
+		define("CLIENT_TIMEZONE", (is_array($data) and isset($data["timezone"])) ? $data["timezone"]:"UTC");
+	}
+	return new DateTimeZone(constant("CLIENT_TIMEZONE") ? constant("CLIENT_TIMEZONE"):"UTC");
+}
+function style_formatTimestamp($timestamp){
+	$date = new DateTime("now", getClientTimezone());
+	return $date->setTimestamp($timestamp)->format(STYLE_DATE);
+}
+function style_formatTimeSpan($seconds){
+	$weeks = 0;
+	$days = 0;
+	$hours = 0;
+	$minutes = 0;
+	while($seconds >= 604800){
+		$seconds -= 604800;
+		$weeks++;
+	}
+	while($seconds >= 86400){
+		$seconds -= 86400;
+		$days++;
+	}
+	while($seconds >= 3600){
+		$seconds -= 3600;
+		$hours++;
+	}
+	while($seconds >= 60){
+		$seconds += 60;
+		$minutes++;
+	}
+	$output = "";
+	if($weeks > 1){
+		$output .= "$weeks weeks, ";
+	}
+	elseif($weeks === 1){
+		$output .= "a week, ";
+	}
+	if($days > 1){
+		$output .= "$days days, ";
+	}
+	elseif($days === 1){
+		$output .= "a day, ";
+	}
+	if($hours > 1){
+		$output .= "$hours hours, ";
+	}
+	elseif($hours === 1){
+		$output .= "a hour, ";
+	}
+	if($minutes > 1){
+		$output .= "$minutes minutes, ";
+	}
+	elseif($minutes === 1){
+		$output .= "a minute, ";
+	}
+	if($seconds > 1){
+		$output .= "$seconds seconds, ";
+	}
+	elseif($seconds === 1){
+		$output .= "a second, ";
+	}
+	return $output === "" ? "0 second":substr($output, 0, -2);
 }
